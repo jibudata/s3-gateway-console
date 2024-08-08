@@ -151,3 +151,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/minio/madmin-go/v3 => github.com/marktheunissen/madmin-go/v3 v3.0.0-20240808031524-8a6ddcc05e14
