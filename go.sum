@@ -144,6 +144,8 @@ github.com/lufia/plan9stats v0.0.0-20240513124658-fba389f38bae h1:dIZY4ULFcto4tA
 github.com/lufia/plan9stats v0.0.0-20240513124658-fba389f38bae/go.mod h1:ilwx/Dta8jXAgpFYFvSWEMwxmbWXyiUHkd5FwyKhb5k=
 github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0=
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
+github.com/marktheunissen/madmin-go/v3 v3.0.0-20240808031524-8a6ddcc05e14 h1:9uOpCxd15LXBDqZ0kgXWAg9QzhOey0yoH41qC6Tpz9A=
+github.com/marktheunissen/madmin-go/v3 v3.0.0-20240808031524-8a6ddcc05e14/go.mod h1:IFAwr0XMrdsLovxAdCcuq/eoL4nRuMVQQv0iubJANQw=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
@@ -175,8 +177,6 @@ github.com/minio/kes v0.23.0 h1:T0zHtyDoI3JdKrVvzdM4xwVryYYyh5pKwNUVBoqxsNs=
 github.com/minio/kes v0.23.0/go.mod h1:vvXVGcgu9mYLkbVWlEvFFl6bYR196RQlOU2Q+rHApl8=
 github.com/minio/kes-go v0.2.1 h1:KnqS+p6xoSFJZbQhmJaz/PbxeA6nQyRqT/ywrn5lU2o=
 github.com/minio/kes-go v0.2.1/go.mod h1:76xf7l41Wrh+IifisABXK2S8uZWYgWV1IGBKC3GdOJk=
-github.com/minio/madmin-go/v3 v3.0.55-0.20240603092915-420a67132c32 h1:9se7/S4AlN2k/B1E7A8m1m07DM3p0JnIOzVhDuAV2PI=
-github.com/minio/madmin-go/v3 v3.0.55-0.20240603092915-420a67132c32/go.mod h1:IFAwr0XMrdsLovxAdCcuq/eoL4nRuMVQQv0iubJANQw=
 github.com/minio/mc v0.0.0-20240605181330-17adf0abbbca h1:Z1oje5L5r4nNODyuEgjwDfkNLO3cT5BRcRHBBWsDT68=
 github.com/minio/mc v0.0.0-20240605181330-17adf0abbbca/go.mod h1:21/cb+wUd+lLRsdX7ACqyO8DzPNSpXftp1bOkQlIbh8=
 github.com/minio/md5-simd v1.1.2 h1:Gdi1DZK69+ZVMoNHRXJyNcxrMA4dSxoYHZSQbirFg34=
