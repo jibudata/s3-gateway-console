@@ -21,12 +21,18 @@ import Routes from "./Routes";
 import configureStore from "./store";
 import * as serviceWorker from "./serviceWorker";
 import { ThemeProvider, withStyles } from "@material-ui/core/styles";
+import { IntlProvider } from 'react-intl'; 
 import "react-virtualized/styles.css";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
 import "./index.css";
 import theme from "./theme/main";
+
+const locale = 'zh_cn';  
+const messages = require(`../assets/i18n/${locale}.json`)
+
+const superLocaleFormat = (locale: string) => locale.split('_').join('-')
 
 const GlobalCss = withStyles({
   // @global is handled by jss-plugin-global.
@@ -57,6 +63,9 @@ const GlobalCss = withStyles({
         borderRadius: 0,
       },
     },
+    ".MuiOutlinedInput-input:-webkit-autofill": {
+      background: "transparent",
+    }
   },
 })(() => null);
 
@@ -65,7 +74,9 @@ ReactDOM.render(
     <GlobalCss />
     <ThemeProvider theme={theme}>
       {/*<ThemeProvider theme={newTheme}>*/}
-      <Routes />
+      <IntlProvider locale={superLocaleFormat(locale)} messages={messages}> 
+        <Routes />
+      </IntlProvider>
     </ThemeProvider>
   </Provider>,
   document.getElementById("root")

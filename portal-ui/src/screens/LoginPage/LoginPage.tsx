@@ -16,15 +16,16 @@
 
 import React, { useEffect, useState } from "react";
 import request from "superagent";
+import Lottie from 'react-lottie';
+import { FormattedMessage, useIntl } from "react-intl";
 import { connect } from "react-redux";
-import ErrorIcon from "@material-ui/icons/Error";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import Alert from '@material-ui/lab/Alert';
 import {
-  CircularProgress,
-  LinearProgress,
+  Collapse,
   Paper,
   TextFieldProps,
 } from "@material-ui/core";
@@ -40,6 +41,7 @@ import api from "../../common/api";
 import { ILoginDetails, loginStrategyType } from "./types";
 import history from "../../history";
 import { OutlinedInputProps } from "@material-ui/core/OutlinedInput";
+import animationData from '../../icons/not_ready.json';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -49,21 +51,22 @@ const styles = (theme: Theme) =>
       },
     },
     paper: {
-      borderRadius: 8,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      width: 800,
-      height: 424,
-      margin: "auto",
+      width: "100%",
+      height: "100vh",
+      backgroundImage: "url(/login_bg.jpg)",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      position: "relative",
+    },
+    logo: {
+      width: "180px",
+      height: "54px",
       position: "absolute",
-      top: "50%",
-      left: "50%",
-      marginLeft: -400,
-      marginTop: -212,
-      "&.MuiPaper-root": {
-        borderRadius: 8,
-      },
+      top: 40,
+      left: 40,
+      backgroundImage: "url(/logo.png)",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "contain",
     },
     avatar: {
       margin: theme.spacing(1),
@@ -73,62 +76,35 @@ const styles = (theme: Theme) =>
       width: "100%", // Fix IE 11 issue.
     },
     submit: {
-      margin: "30px 0px 16px",
-      height: 40,
+      width: "100%",
+      height: 60,
       boxShadow: "none",
       padding: "16px 30px",
-    },
-    errorBlock: {
-      backgroundColor: "#C72C48",
-      width: 800,
-      height: 64,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      position: "absolute",
-      left: "50%",
-      top: "50%",
-      marginLeft: -400,
-      marginTop: -290,
-      color: "#fff",
-      fontWeight: 700,
-      fontSize: 14,
-      borderRadius: 8,
-      padding: 10,
-      boxSizing: "border-box",
-    },
-    mainContainer: {
-      position: "relative",
-      height: 424,
-    },
-    theOcean: {
-      borderTopLeftRadius: 8,
-      borderBottomLeftRadius: 8,
-      background:
-        "transparent linear-gradient(to bottom, #073052 0%,#05122b 100%); 0% 0% no-repeat padding-box;",
-    },
-    oceanBg: {
-      backgroundImage: "url(/images/BG_Illustration.svg)",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "bottom left",
-      height: "100%",
-      width: 324,
+      margin: "40px auto 20px",
     },
     theLogin: {
-      padding: "40px 45px 20px 45px",
+      height: "100%",
+      background: "rgba(255, 255, 255, 0.3)",
+      backdropFilter: "blur(10px)",
+      display: "flex",
+      flexDirection: "column",
+      padding: "40px",
+      justifyContent: "center",
     },
     loadingLoginStrategy: {
       textAlign: "center",
     },
     headerTitle: {
-      marginBottom: 10,
+      marginBottom: 30,
+      fontSize: 40,
     },
     submitContainer: {
       textAlign: "right",
     },
     disclaimer: {
       fontSize: 12,
-      marginTop: 30,
+      marginTop: 10,
+      textAlign: "right"
     },
     jwtInput: {
       marginTop: 45,
@@ -136,9 +112,10 @@ const styles = (theme: Theme) =>
     linearPredef: {
       height: 10,
     },
-    errorIconStyle: {
-      marginRight: 3,
-    },
+    alert: {
+      marginTop: '40px',
+      width: "calc(100% - 38px)"
+    }
   });
 
 const inputStyles = makeStyles((theme: Theme) =>
@@ -158,6 +135,7 @@ function LoginField(props: TextFieldProps) {
   return (
     <TextField
       InputProps={{ classes } as Partial<OutlinedInputProps>}
+      variant="outlined"
       {...props}
     />
   );
@@ -186,6 +164,7 @@ interface LoginStrategyPayload {
 }
 
 const Login = ({ classes, userLoggedIn }: ILoginProps) => {
+  const { formatMessage } = useIntl();
   const [accessKey, setAccessKey] = useState<string>("");
   const [jwt, setJwt] = useState<string>("");
   const [secretKey, setSecretKey] = useState<string>("");
@@ -219,7 +198,7 @@ const Login = ({ classes, userLoggedIn }: ILoginProps) => {
         }
       })
       .catch((err: any) => {
-        setError(err);
+        console.warn(err)
       });
   };
 
@@ -268,11 +247,12 @@ const Login = ({ classes, userLoggedIn }: ILoginProps) => {
             component="h1"
             variant="h6"
             className={classes.headerTitle}
+            align="center"
           >
-            Console Login
+            <FormattedMessage id="login.title" />
           </Typography>
           <form className={classes.form} noValidate onSubmit={formSubmit}>
-            <Grid container spacing={2}>
+            <Grid container spacing={5}>
               <Grid item xs={12}>
                 <LoginField
                   fullWidth
@@ -281,7 +261,7 @@ const Login = ({ classes, userLoggedIn }: ILoginProps) => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setAccessKey(e.target.value)
                   }
-                  label="Enter Access Key"
+                  label={formatMessage({ id: 'login.access_key' })}
                   name="accessKey"
                   autoComplete="username"
                   disabled={loginSending}
@@ -295,7 +275,7 @@ const Login = ({ classes, userLoggedIn }: ILoginProps) => {
                     setSecretKey(e.target.value)
                   }
                   name="secretKey"
-                  label="Enter Secret Key"
+                  label={formatMessage({ id: 'login.secret_key' })}
                   type="password"
                   id="secretKey"
                   autoComplete="current-password"
@@ -311,123 +291,138 @@ const Login = ({ classes, userLoggedIn }: ILoginProps) => {
                 className={classes.submit}
                 disabled={secretKey === "" || accessKey === "" || loginSending}
               >
-                Login
+                <FormattedMessage id={`login.${loginSending ? 'pending' : 'login'}`} />
               </Button>
             </Grid>
-            <Grid item xs={12} className={classes.linearPredef}>
-              {loginSending && <LinearProgress />}
-            </Grid>
-            <Grid item xs={12} className={classes.disclaimer}>
-              <strong>Don't have an access key?</strong>
-              <br />
-              <br />
-              Contact your administrator to have one made
-            </Grid>
-          </form>
-        </React.Fragment>
-      );
-      break;
-    }
-    case loginStrategyType.redirect: {
-      loginComponent = (
-        <React.Fragment>
-          <Typography
-            component="h1"
-            variant="h6"
-            className={classes.headerTitle}
-          >
-            Welcome
-          </Typography>
-          <Button
-            component={"a"}
-            href={loginStrategy.redirect.replace(
-              "%5BHOSTNAME%5D",
-              window.location.hostname
-            )}
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Login with SSO
-          </Button>
-        </React.Fragment>
-      );
-      break;
-    }
-    case loginStrategyType.serviceAccount: {
-      loginComponent = (
-        <React.Fragment>
-          <Typography
-            component="h1"
-            variant="h6"
-            className={classes.headerTitle}
-          >
-            Operator Login
-          </Typography>
-          <form className={classes.form} noValidate onSubmit={formSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} className={classes.jwtInput}>
-                <LoginField
-                  required
-                  fullWidth
-                  id="jwt"
-                  value={jwt}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setJwt(e.target.value)
-                  }
-                  label="JWT"
-                  name="jwt"
-                  autoComplete="off"
-                  disabled={loginSending}
-                />
+            {/* {loginSending && (
+              <Grid item xs={12} className={classes.linearPredef}>
+                <LinearProgress />
               </Grid>
-            </Grid>
-            <Grid item xs={12} className={classes.submitContainer}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={jwt === "" || loginSending}
-              >
-                Login
-              </Button>
-            </Grid>
-            <Grid item xs={12} className={classes.linearPredef}>
-              {loginSending && <LinearProgress />}
-            </Grid>
+            )} */}
             <Grid item xs={12} className={classes.disclaimer}>
-              <strong>Don't have an access key?</strong>
-              <br />
-              Contact your administrator to have one made
+              <strong><FormattedMessage id="login.no_access_key_title" /></strong>{' '}
+              <FormattedMessage id="login.no_access_key_sub" />
             </Grid>
           </form>
         </React.Fragment>
       );
       break;
     }
+    // case loginStrategyType.redirect: {
+    //   loginComponent = (
+    //     <React.Fragment>
+    //       <Typography
+    //         component="h1"
+    //         variant="h6"
+    //         className={classes.headerTitle}
+    //       >
+    //         <FormattedMessage id="login.title" />
+    //       </Typography>
+    //       <Button
+    //         component={"a"}
+    //         href={loginStrategy.redirect.replace(
+    //           "%5BHOSTNAME%5D",
+    //           window.location.hostname
+    //         )}
+    //         type="submit"
+    //         variant="contained"
+    //         color="primary"
+    //         className={classes.submit}
+    //       >
+    //         Login with SSO
+    //       </Button>
+    //     </React.Fragment>
+    //   );
+    //   break;
+    // }
+    // case loginStrategyType.serviceAccount: {
+    //   loginComponent = (
+    //     <React.Fragment>
+    //       <Typography
+    //         component="h1"
+    //         variant="h6"
+    //         className={classes.headerTitle}
+    //       >
+    //         Operator Login
+    //       </Typography>
+    //       <form className={classes.form} noValidate onSubmit={formSubmit}>
+    //         <Grid container spacing={2}>
+    //           <Grid item xs={12} className={classes.jwtInput}>
+    //             <LoginField
+    //               required
+    //               fullWidth
+    //               id="jwt"
+    //               value={jwt}
+    //               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+    //                 setJwt(e.target.value)
+    //               }
+    //               label="JWT"
+    //               name="jwt"
+    //               autoComplete="off"
+    //               disabled={loginSending}
+    //             />
+    //           </Grid>
+    //         </Grid>
+    //         <Grid item xs={12} className={classes.submitContainer}>
+    //           <Button
+    //             type="submit"
+    //             variant="contained"
+    //             color="primary"
+    //             className={classes.submit}
+    //             disabled={jwt === "" || loginSending}
+    //           >
+    //             Login
+    //           </Button>
+    //         </Grid>
+    //         <Grid item xs={12} className={classes.linearPredef}>
+    //           {loginSending && <LinearProgress />}
+    //         </Grid>
+    //         <Grid item xs={12} className={classes.disclaimer}>
+    //           <strong>Don't have an access key?</strong>
+    //           <br />
+    //           Contact your administrator to have one made
+    //         </Grid>
+    //       </form>
+    //     </React.Fragment>
+    //   );
+    //   break;
+    // }
     default:
       loginComponent = (
-        <CircularProgress className={classes.loadingLoginStrategy} />
+        <div>
+          <Lottie
+            options={{
+              loop: true,
+              autoplay: true,
+              animationData: animationData,
+              rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice'
+              }
+            }}
+            height={400}
+            width={400}
+          />
+          <Typography align="center" component="h1" variant="h3">
+            <i>Uh-oh</i>
+          </Typography>
+          <Typography align="center">
+            <FormattedMessage id="login.not_ready" />
+          </Typography>
+        </div>
       );
   }
 
   return (
     <React.Fragment>
-      {error !== "" && (
-        <div className={classes.errorBlock}>
-          <ErrorIcon fontSize="small" className={classes.errorIconStyle} />{" "}
-          {error}
-        </div>
-      )}
       <Paper className={classes.paper}>
-        <Grid container className={classes.mainContainer}>
-          <Grid item xs={7} className={classes.theOcean}>
-            <div className={classes.oceanBg} />
-          </Grid>
+        <div className={classes.logo} />
+        <Grid container className="h-100">
+          <Grid item xs={7} />
           <Grid item xs={5} className={classes.theLogin}>
             {loginComponent}
+            <Collapse in={!!error} className={classes.alert}>
+              <Alert onClose={() => setError("")} severity="error" className="w-100">{error}</Alert>
+            </Collapse>
           </Grid>
         </Grid>
       </Paper>

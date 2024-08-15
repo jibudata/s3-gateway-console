@@ -1,0 +1,10 @@
+{
+  "login.title": "对象存储管理系统",
+  "login.access_key": "请输入ACCESS KEY",
+  "login.secret_key": "请输入SECRET KEY",
+  "login.login": "登录",
+  "login.pending": "登录中...",
+  "login.no_access_key_title": "还没有Access Key?",
+  "login.no_access_key_sub": "请联系管理员",
+  "login.not_ready": "环境还没准备好，请联系管理员"
+}
