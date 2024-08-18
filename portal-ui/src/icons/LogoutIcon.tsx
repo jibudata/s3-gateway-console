@@ -19,24 +19,9 @@ import { SvgIcon } from "@material-ui/core";
 const LogoutIcon = () => {
   return (
     <SvgIcon>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.122 10.571">
-        <g transform="translate(0 0.5)">
-          <path
-            style={{ fill: "none", stroke: "rgba(255,255,255,0.8)" }}
-            d="M4816.27,3755.205v-2.939h8.539v9.571h-8.539v-2.932"
-            transform="translate(-4813.187 -3752.266)"
-          />
-          <path
-            style={{ fill: "none", stroke: "rgba(255,255,255,0.8)" }}
-            d="M4813.187,3757.052h8.081"
-            transform="translate(-4813.187 -3752.266)"
-          />
-          <path
-            style={{ fill: "none", stroke: "rgba(255,255,255,0.8)" }}
-            d="M4806.5,3756.511l2.265,2.063-2.265,2.063"
-            transform="translate(-4800.808 -3753.863)"
-          />
-        </g>
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path d="M286.05 319.72h365.73V93.55c0-16.57-13.43-30-30-30H129.32c-16.56 0-30 13.43-30 30v836c0 16.57 13.44 30 30 30h492.46c16.57 0 30-13.43 30-30V703.38H286.05c-16.57 0-30-13.43-30-30V349.72c0-16.57 13.43-30 30-30z" p-id="8212"></path>
+        <path d="M915.53 492.02l-172.5-228.28c-12.6-12.61-34.15-3.68-34.15 14.14V383.8H349.33c-16.57 0-30 13.43-30 30v196.17c0 16.57 13.43 30 30 30h359.55v106.81c0 17.82 21.55 26.74 34.15 14.14l172.5-226.49c11.7-11.72 11.7-30.7 0-42.41z" p-id="8213"></path>
       </svg>
     </SvgIcon>
   );

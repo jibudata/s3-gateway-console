@@ -65,10 +65,11 @@ const SelectStyled = withStyles((theme: Theme) =>
       color: "#393939",
       fontSize: 13,
       fontWeight: 600,
-      padding: "15px 20px 10px 10px",
-      borderBottom: "1px solid #9c9c9c",
+      padding: 15,
+      border: "1px solid #c4c4c4",
       display: "flex",
       alignItems: "center",
+      borderRadius: 4,
       "&:hover": {
         borderColor: "#393939",
       },

@@ -101,7 +101,7 @@ const styles = (theme: Theme) =>
       },
     },
     divContainer: {
-      borderBottom: "#9c9c9c 1px solid",
+      borderBottom: "#e2e2e2 1px dashed",
       paddingBottom: 14,
       marginBottom: 20,
       maxWidth: 840,
@@ -129,7 +129,7 @@ const styles = (theme: Theme) =>
 const StyledSwitch = withStyles({
   root: {
     alignItems: "flex-start",
-    height: 18,
+    height: 22,
     padding: "0 12px",
     display: "flex",
     position: "relative",
@@ -157,19 +157,18 @@ const StyledSwitch = withStyles({
     border: "#081C42 1px solid",
     opacity: 1,
     padding: 0,
-    marginTop: 1.5,
     "&$checked": {
       backgroundColor: "#081C42",
     },
   },
   thumb: {
     backgroundColor: "#fff",
-    border: "#081C42 1px solid",
     boxShadow: "none",
     width: 18,
     height: 18,
     padding: 0,
-    marginLeft: 10,
+    marginLeft: 13,
+    marginTop: 1,
   },
 })(Switch);
 
@@ -191,7 +190,7 @@ const FormSwitchWrapper = ({
   const switchComponent = (
     <React.Fragment>
       <div className={`${classes.switchContainer} ${containerClass}`}>
-        <StyledSwitch
+        <Switch
           checked={checked}
           onChange={onChange}
           color="primary"

@@ -17,6 +17,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { useIntl } from "react-intl";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -26,7 +27,7 @@ import List from "@material-ui/core/List";
 import { Divider, withStyles } from "@material-ui/core";
 import { createStyles, Theme } from "@material-ui/core/styles";
 import history from "../../../history";
-import logo from "../../../icons/minio_console_logo.svg";
+import logo from "../../../icons/jibu_console_logo.png";
 import operator_logo from "../../../icons/minio_operator_logo.svg";
 import { AppState } from "../../../store";
 import { userLoggedIn } from "../../../actions";
@@ -46,6 +47,7 @@ import {
   UsersIcon,
   WarpIcon,
 } from "../../../icons";
+import TrackChangesSharpIcon from "@material-ui/icons/TrackChangesSharp";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import { clearSession } from "../../../common/utils";
 import LicenseIcon from "../../../icons/LicenseIcon";
@@ -53,7 +55,7 @@ import LogoutIcon from "../../../icons/LogoutIcon";
 import ConsoleIcon from "../../../icons/ConsoleIcon";
 import HealIcon from "../../../icons/HealIcon";
 import WatchIcon from "../../../icons/WatchIcon";
-import TrackChangesSharpIcon from "@material-ui/icons/TrackChangesSharp";
+
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -62,10 +64,11 @@ const styles = (theme: Theme) =>
       marginBottom: 30,
       paddingLeft: 45,
       "& img": {
-        width: 120,
+        width: 160,
       },
     },
     menuList: {
+      height: "100%",
       "& .active": {
         borderTopLeftRadius: 2,
         borderBottomLeftRadius: 2,
@@ -80,15 +83,15 @@ const styles = (theme: Theme) =>
         },
       },
       "& .MuiSvgIcon-root": {
-        fontSize: 16,
+        fontSize: 20,
         color: "rgba(255, 255, 255, 0.8)",
-        maxWidth: 14,
+        maxWidth: 16,
       },
       "& .MuiListItemIcon-root": {
-        minWidth: 25,
+        minWidth: 30,
       },
       "& .MuiTypography-root": {
-        fontSize: 12,
+        fontSize: 14,
         color: "rgba(255, 255, 255, 0.8)",
       },
       "& .MuiListItem-gutters": {
@@ -100,6 +103,7 @@ const styles = (theme: Theme) =>
         marginBottom: 8,
         marginLeft: 30,
         width: "calc(100% - 30px)",
+        height: 60
       },
       "& .MuiCollapse-container .MuiCollapse-wrapper .MuiCollapse-wrapperInner .MuiDivider-root": {
         backgroundColor: "rgba(112,112,112,0.5)",
@@ -147,6 +151,10 @@ const styles = (theme: Theme) =>
     selectorArrowOpen: {
       transform: "rotateZ(180deg)",
     },
+    logout: {
+      position: 'absolute',
+      bottom: 10,
+    }
   });
 
 const mapState = (state: AppState) => ({
@@ -170,6 +178,7 @@ const menuStateBuilder = () => {
 
 const Menu = ({ userLoggedIn, classes, pages, operatorMode }: IMenuProps) => {
   const [menuOpen, setMenuOpen] = useState<any>(menuStateBuilder());
+  const { formatMessage } = useIntl();
 
   const logout = () => {
     const deleteSession = () => {
@@ -196,129 +205,129 @@ const Menu = ({ userLoggedIn, classes, pages, operatorMode }: IMenuProps) => {
       type: "item",
       component: NavLink,
       to: "/dashboard",
-      name: "Dashboard",
+      name: formatMessage({ id: "menu.dashboard" }),
       icon: <DashboardIcon />,
     },
+    // {
+    //   group: "User",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/object-browser",
+    //   name: "Object Browser",
+    //   icon: <DescriptionIcon />,
+    // },
+    // {
+    //   group: "User",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/account",
+    //   name: "Account",
+    //   icon: <ServiceAccountsIcon />,
+    // },
     {
-      group: "User",
-      type: "item",
-      component: NavLink,
-      to: "/object-browser",
-      name: "Object Browser",
-      icon: <DescriptionIcon />,
-    },
-    {
-      group: "User",
-      type: "item",
-      component: NavLink,
-      to: "/account",
-      name: "Account",
-      icon: <ServiceAccountsIcon />,
-    },
-    {
-      group: "Admin",
+      group: "common",
       type: "item",
       component: NavLink,
       to: "/buckets",
-      name: "Buckets",
+      name: formatMessage({ id: "menu.buckets" }),
       icon: <BucketsIcon />,
     },
     {
-      group: "Admin",
+      group: "common",
       type: "item",
       component: NavLink,
       to: "/users",
-      name: "Users",
+      name: formatMessage({ id: "menu.users" }),
       icon: <UsersIcon />,
     },
     {
-      group: "Admin",
+      group: "common",
       type: "item",
       component: NavLink,
       to: "/groups",
-      name: "Groups",
+      name: formatMessage({ id: "menu.groups" }),
       icon: <GroupsIcon />,
     },
-    {
-      group: "Admin",
-      type: "item",
-      component: NavLink,
-      to: "/policies",
-      name: "IAM Policies",
-      icon: <IAMPoliciesIcon />,
-    },
-    {
-      group: "Tools",
-      type: "item",
-      component: NavLink,
-      to: "/logs",
-      name: "Logs",
-      icon: <ConsoleIcon />,
-    },
-    {
-      group: "Tools",
-      type: "item",
-      component: NavLink,
-      to: "/watch",
-      name: "Watch",
-      icon: <WatchIcon />,
-    },
-    {
-      group: "Tools",
-      type: "item",
-      component: NavLink,
-      to: "/trace",
-      name: "Trace",
-      icon: <TraceIcon />,
-    },
-    {
-      group: "Tools",
-      type: "item",
-      component: NavLink,
-      to: "/heal",
-      name: "Heal",
-      icon: <HealIcon />,
-    },
-    {
-      group: "Tools",
-      type: "item",
-      component: NavLink,
-      to: "/health-info",
-      name: "Diagnostic",
-      icon: <TrackChangesSharpIcon />,
-    },
-    {
-      group: "Admin",
-      type: "item",
-      component: NavLink,
-      to: "/settings",
-      name: "Settings",
-      icon: <ConfigurationsListIcon />,
-    },
-    {
-      group: "Operator",
-      type: "item",
-      component: NavLink,
-      to: "/tenants",
-      name: "Tenants",
-      icon: <ClustersIcon />,
-    },
-    {
-      group: "Operator",
-      type: "item",
-      component: NavLink,
-      to: "/mirroring",
-      name: "Mirroring",
-      icon: <MirroringIcon />,
-    },
-    {
-      group: "Operator",
-      type: "item",
-      component: NavLink,
-      to: "/warp",
-      name: "Warp",
-      icon: <WarpIcon />,
-    },
+    // {
+    //   group: "Admin",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/policies",
+    //   name: "IAM Policies",
+    //   icon: <IAMPoliciesIcon />,
+    // },
+    // {
+    //   group: "Tools",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/logs",
+    //   name: "Logs",
+    //   icon: <ConsoleIcon />,
+    // },
+    // {
+    //   group: "Tools",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/watch",
+    //   name: "Watch",
+    //   icon: <WatchIcon />,
+    // },
+    // {
+    //   group: "Tools",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/trace",
+    //   name: "Trace",
+    //   icon: <TraceIcon />,
+    // },
+    // {
+    //   group: "Tools",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/heal",
+    //   name: "Heal",
+    //   icon: <HealIcon />,
+    // },
+    // {
+    //   group: "Tools",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/health-info",
+    //   name: "Diagnostic",
+    //   icon: <TrackChangesSharpIcon />,
+    // },
+    // {
+    //   group: "Admin",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/settings",
+    //   name: "Settings",
+    //   icon: <ConfigurationsListIcon />,
+    // },
+    // {
+    //   group: "Operator",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/tenants",
+    //   name: "Tenants",
+    //   icon: <ClustersIcon />,
+    // },
+    // {
+    //   group: "Operator",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/mirroring",
+    //   name: "Mirroring",
+    //   icon: <MirroringIcon />,
+    // },
+    // {
+    //   group: "Operator",
+    //   type: "item",
+    //   component: NavLink,
+    //   to: "/warp",
+    //   name: "Warp",
+    //   icon: <WarpIcon />,
+    // },
   ];
 
   const allowedPages = pages.reduce((result: any, item: any) => {
@@ -326,72 +335,72 @@ const Menu = ({ userLoggedIn, classes, pages, operatorMode }: IMenuProps) => {
     return result;
   }, {});
 
-  const documentation: IMenuItem = {
-    group: "License",
-    type: "item",
-    component: NavLink,
-    to: "/documentation",
-    name: "Documentation",
-    icon: <LibraryBooksIcon />,
-    forceDisplay: true,
-  };
+  // const documentation: IMenuItem = {
+  //   group: "License",
+  //   type: "item",
+  //   component: NavLink,
+  //   to: "/documentation",
+  //   name: "Documentation",
+  //   icon: <LibraryBooksIcon />,
+  //   forceDisplay: true,
+  // };
 
   // Append the license page according to the allowedPages
-  if (allowedPages.hasOwnProperty("/tenants")) {
-    menuItems.push(
-      {
-        group: "Operator",
-        type: "item",
-        component: NavLink,
-        to: "/license",
-        name: "License",
-        icon: <LicenseIcon />,
-      },
-      {
-        ...documentation,
-        group: "Operator",
-        onClick: (
-          e:
-            | React.MouseEvent<HTMLLIElement>
-            | React.MouseEvent<HTMLAnchorElement>
-            | React.MouseEvent<HTMLDivElement>
-        ) => {
-          e.preventDefault();
-          window.open(
-            `https://docs.min.io/?ref=${operatorMode ? "op" : "con"}`,
-            "_blank"
-          );
-        },
-      }
-    );
-  } else {
-    menuItems.push(
-      {
-        group: "License",
-        type: "item",
-        component: NavLink,
-        to: "/license",
-        name: "License",
-        icon: <LicenseIcon />,
-      },
-      {
-        ...documentation,
-        group: "License",
-        onClick: (
-          e:
-            | React.MouseEvent<HTMLLIElement>
-            | React.MouseEvent<HTMLAnchorElement>
-            | React.MouseEvent<HTMLDivElement>
-        ) => {
-          e.preventDefault();
-          window.open(
-            `https://docs.min.io/?ref=${operatorMode ? "op" : "con"}`,
-            "_blank"
-          );
-        },
-      }
-    );
-  }
+  // if (allowedPages.hasOwnProperty("/tenants")) {
+  //   menuItems.push(
+  //     {
+  //       group: "Operator",
+  //       type: "item",
+  //       component: NavLink,
+  //       to: "/license",
+  //       name: "License",
+  //       icon: <LicenseIcon />,
+  //     },
+  //     {
+  //       ...documentation,
+  //       group: "Operator",
+  //       onClick: (
+  //         e:
+  //           | React.MouseEvent<HTMLLIElement>
+  //           | React.MouseEvent<HTMLAnchorElement>
+  //           | React.MouseEvent<HTMLDivElement>
+  //       ) => {
+  //         e.preventDefault();
+  //         window.open(
+  //           `https://docs.min.io/?ref=${operatorMode ? "op" : "con"}`,
+  //           "_blank"
+  //         );
+  //       },
+  //     }
+  //   );
+  // } else {
+  //   menuItems.push(
+  //     {
+  //       group: "License",
+  //       type: "item",
+  //       component: NavLink,
+  //       to: "/license",
+  //       name: "License",
+  //       icon: <LicenseIcon />,
+  //     },
+  //     {
+  //       ...documentation,
+  //       group: "License",
+  //       onClick: (
+  //         e:
+  //           | React.MouseEvent<HTMLLIElement>
+  //           | React.MouseEvent<HTMLAnchorElement>
+  //           | React.MouseEvent<HTMLDivElement>
+  //       ) => {
+  //         e.preventDefault();
+  //         window.open(
+  //           `https://docs.min.io/?ref=${operatorMode ? "op" : "con"}`,
+  //           "_blank"
+  //         );
+  //       },
+  //     }
+  //   );
+  // }
 
   const allowedItems = menuItems.filter(
     (item: any) =>
@@ -492,17 +501,17 @@ const Menu = ({ userLoggedIn, classes, pages, operatorMode }: IMenuProps) => {
                       return null;
                   }
                 })}
-                <Divider />
+                {/* <Divider /> */}
               </Collapse>
             </React.Fragment>
           );
         })}
 
-        <ListItem button onClick={logout}>
+        <ListItem button onClick={logout} className={classes.logout}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText primary="Logout" />
+          <ListItemText primary={formatMessage({ id: "menu.logout" })} />
         </ListItem>
       </List>
     </React.Fragment>

@@ -119,7 +119,6 @@ const ModalWrapper = ({
   setModalSnackMessage,
 }: IModalProps) => {
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-
   useEffect(() => {
     if (modalSnackMessage) {
       if (modalSnackMessage.message === "") {
@@ -136,6 +135,12 @@ const ModalWrapper = ({
     setModalSnackMessage("");
   };
 
+  const handleClose = () => {
+    onClose();
+    closeSnackBar();
+  }
+
+
   const customSize = wideLimit
     ? {
         classes: {
@@ -147,7 +152,7 @@ const ModalWrapper = ({
   return (
     <Dialog
       open={modalOpen}
-      onClose={onClose}
+      onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       {...customSize}
@@ -177,7 +182,7 @@ const ModalWrapper = ({
           <IconButton
             aria-label="close"
             className={classes.closeButton}
-            onClick={onClose}
+            onClick={handleClose}
             disableRipple
           >
             <span className={classes.closeIcon} />

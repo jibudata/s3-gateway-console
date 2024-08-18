@@ -17,7 +17,7 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { connect } from "react-redux";
 import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -41,6 +41,9 @@ import AddBucket from "./AddBucket";
 import DeleteBucket from "./DeleteBucket";
 import PageHeader from "../../Common/PageHeader/PageHeader";
 import BulkReplicationModal from "./BulkReplicationModal";
+import { useIntl, FormattedMessage } from "react-intl";
+import Lottie from "react-lottie";
+import animationData from '../../../../icons/no_content.json';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -89,6 +92,7 @@ const ListBuckets = ({
   addBucketReset,
   setErrorSnackMessage,
 }: IListBucketsProps) => {
+  const { formatMessage } = useIntl();
   const [records, setRecords] = useState<Bucket[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
@@ -226,6 +230,51 @@ const ListBuckets = ({
     }
   };
 
+  const onSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      return setSelectedBuckets(filteredRecords.map((r) => r.name))
+    } else {
+      return setSelectedBuckets([]);
+    }
+  }
+
+  const customEmptyContent = (
+    <div>
+      <Lottie
+        options={{
+          loop: true,
+          autoplay: true,
+          animationData: animationData,
+          rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+          }
+        }}
+        height={300}
+        width={300}
+      />
+      <Typography align="center" component="h1" variant="h3">
+        <i>Uh-oh</i>
+      </Typography>
+      {!!filterBuckets ? (
+        <>
+          <Typography align="center">
+            <FormattedMessage id="buckets.no_bucket_search" />
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography align="center">
+            <FormattedMessage id="buckets.no_bucket" />
+          </Typography>
+          <Typography align="center" className="f12 light-text w-70 mt-4 mx-auto">
+            <FormattedMessage id="buckets.bucket_description" />
+          </Typography>
+        </>
+      )}
+
+    </div>
+  )
+
   return (
     <Fragment>
       {addBucketModalOpen && (
@@ -250,12 +299,12 @@ const ListBuckets = ({
           closeModalAndRefresh={closeBulkReplicationModal}
         />
       )}
-      <PageHeader label={"Buckets"} />
+      <PageHeader label={formatMessage({ id: "menu.buckets" })} />
       <Grid container>
         <Grid item xs={12} className={classes.container}>
           <Grid item xs={12} className={classes.actionsTray}>
             <TextField
-              placeholder="Search Buckets"
+              placeholder={formatMessage({ id: "buckets.search_buckets" })}
               className={classes.searchField}
               id="search-resource"
               label=""
@@ -280,7 +329,7 @@ const ListBuckets = ({
               }}
               disabled={selectedBuckets.length === 0}
             >
-              Set Replication
+              <FormattedMessage id="buckets.set_replication" />
             </Button>
             {canCreateBucket && (
               <Button
@@ -291,37 +340,38 @@ const ListBuckets = ({
                   addBucketOpen(true);
                 }}
               >
-                Create Bucket
+                <FormattedMessage id="buckets.create_bucket" />
               </Button>
             )}
           </Grid>
-          <Grid item xs={12}>
-            <br />
-          </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} className="mt-3">
             <TableWrapper
               itemActions={tableActions}
               columns={[
-                { label: "Name", elementKey: "name" },
+                { 
+                  label: formatMessage({ id: "buckets.table.title.name" }), 
+                  elementKey: "name" 
+                },
                 {
-                  label: "Creation Date",
+                  label: formatMessage({ id: "buckets.table.title.creation_time" }),
                   elementKey: "creation_date",
                   renderFunction: displayParsedDate,
                 },
                 {
-                  label: "Size",
+                  label: formatMessage({ id: "buckets.table.title.size" }),
                   elementKey: "size",
                   renderFunction: niceBytes,
                   width: 60,
-                  contentTextAlign: "right",
                 },
               ]}
               isLoading={loading}
               records={filteredRecords}
               entityName="Buckets"
+              customEmptyContent={customEmptyContent}
               idField="name"
               selectedItems={selectedBuckets}
               onSelect={selectListBuckets}
+              onSelectAllClick={onSelectAll}
             />
           </Grid>
         </Grid>

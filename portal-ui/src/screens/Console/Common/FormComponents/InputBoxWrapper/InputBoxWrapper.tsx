@@ -52,6 +52,7 @@ interface InputBoxProps {
   max?: string;
   overlayIcon?: any;
   overlayAction?: () => void;
+  variant?: "filled" | "standard" | "outlined" | undefined
 }
 
 const styles = (theme: Theme) =>
@@ -86,7 +87,7 @@ const styles = (theme: Theme) =>
 const inputStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      borderRadius: 0,
+      marginTop: 14,
       "&::before": {
         borderColor: "#9c9c9c",
       },
@@ -98,10 +99,9 @@ const inputStyles = makeStyles((theme: Theme) =>
       },
     },
     input: {
-      padding: "15px 30px 10px 5px",
+      padding: "15px",
       color: "#393939",
-      fontSize: 13,
-      fontWeight: 600,
+      fontSize: 14,
       "&:placeholder": {
         color: "#393939",
         opacity: 1,
@@ -144,6 +144,7 @@ const InputBoxWrapper = ({
   overlayIcon = null,
   overlayAction,
   classes,
+  variant
 }: InputBoxProps) => {
   let inputProps: any = { "data-index": index };
 
@@ -198,6 +199,7 @@ const InputBoxWrapper = ({
             helperText={error}
             placeholder={placeholder}
             className={classes.inputRebase}
+            variant={variant}
           />
         </div>
         {overlayIcon && (

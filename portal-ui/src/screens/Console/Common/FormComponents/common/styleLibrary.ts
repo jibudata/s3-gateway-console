@@ -46,6 +46,7 @@ export const fieldBasic = {
   switchContainer: {
     display: "flex",
     maxWidth: 840,
+    alignItems: "center"
   },
 };
 
@@ -102,8 +103,7 @@ export const checkboxIcons = {
   unCheckedIcon: { ...checkBoxBasic, border: "1px solid #c3c3c3" },
   checkedIcon: {
     ...checkBoxBasic,
-    border: "1px solid #081C42",
-    backgroundColor: "#081C42",
+    backgroundColor: "var(--primary-color)",
   },
 };
 
@@ -175,11 +175,10 @@ export const searchField = {
     justifyContent: "center",
     padding: "0 16px",
     "& input": {
-      fontSize: 12,
-      fontWeight: 700,
+      fontSize: 14,
       color: "#000",
       "&::placeholder": {
-        color: "#393939",
+        color: "#b5b5b5",
         opacity: 1,
       },
     },
@@ -442,7 +441,7 @@ export const snackBarCommon = {
     },
   },
   errorSnackBar: {
-    backgroundColor: "#C72C48",
+    backgroundColor: "#dc1f2e",
     color: "#fff",
   },
   snackBarExternal: {

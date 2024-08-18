@@ -116,17 +116,6 @@ const styles = (theme: Theme) =>
         "transparent linear-gradient(90deg, #073052 0%, #081C42 100%) 0% 0% no-repeat padding-box",
       boxShadow: "0px 3px 7px #00000014",
     },
-    drawerPaperClose: {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    },
     content: {
       flexGrow: 1,
       height: "100vh",
@@ -331,7 +320,7 @@ const Console = ({
             classes={{
               paper: clsx(
                 classes.drawerPaper,
-                !open && classes.drawerPaperClose
+                "sideMenubar"
               ),
             }}
             open={open}
@@ -399,7 +388,7 @@ const Console = ({
                       key={route.path}
                       exact
                       path={route.path}
-                      children={(routerProps) => (
+                      children={(routerProps: any) => (
                         <route.component {...routerProps} {...route.props} />
                       )}
                     />

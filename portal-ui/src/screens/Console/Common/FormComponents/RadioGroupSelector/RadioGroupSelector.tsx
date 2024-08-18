@@ -56,7 +56,7 @@ const styles = (theme: Theme) =>
       ...fieldBasic.fieldContainer,
       display: "flex",
       justifyContent: "space-between",
-      borderBottom: "#9c9c9c 1px solid",
+      borderBottom: "#e2e2e2 1px dashed",
       paddingBottom: 10,
       marginTop: 11,
     },
@@ -83,25 +83,12 @@ const styles = (theme: Theme) =>
     },
   });
 
-const radioStyles = makeStyles({
-  root: {
-    "&:hover": {
-      backgroundColor: "transparent",
-    },
-  },
-  ...radioIcons,
-});
-
 const RadioButton = (props: RadioProps) => {
-  const classes = radioStyles();
-
   return (
     <Radio
-      className={classes.root}
       disableRipple
       color="default"
-      checkedIcon={<span className={classes.radioSelectedIcon} />}
-      icon={<span className={classes.radioUnselectedIcon} />}
+      size="small"
       {...props}
     />
   );

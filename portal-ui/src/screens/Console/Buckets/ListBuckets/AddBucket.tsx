@@ -27,6 +27,7 @@ import RadioGroupSelector from "../../Common/FormComponents/RadioGroupSelector/R
 import { factorForDropdown, getBytes } from "../../../../common/utils";
 import { AppState } from "../../../../store";
 import { connect } from "react-redux";
+import { useIntl, FormattedMessage } from "react-intl";
 import {
   addBucketEnableObjectLocking,
   addBucketName,
@@ -63,6 +64,7 @@ const styles = (theme: Theme) =>
       maxWidth: 80,
       marginLeft: 8,
       alignSelf: "flex-start" as const,
+      marginTop: 17,
     },
     ...modalBasic,
   });
@@ -124,6 +126,7 @@ const AddBucket = ({
   retentionUnit,
   retentionValidity,
 }: IAddBucketProps) => {
+  const { formatMessage } = useIntl();
   const [addLoading, setAddLoading] = useState<boolean>(false);
   const [sendEnabled, setSendEnabled] = useState<boolean>(false);
   const [lockingFieldDisabled, setLockingFieldDisabled] = useState<boolean>(
@@ -248,7 +251,7 @@ const AddBucket = ({
 
   return (
     <ModalWrapper
-      title="Create Bucket"
+      title={formatMessage({ id: "buckets.create_form.title" })}
       modalOpen={open}
       onClose={() => {
         closeModalAndRefresh(false);
@@ -272,13 +275,15 @@ const AddBucket = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   addBucketName(event.target.value);
                 }}
-                label="Bucket Name"
+                label={formatMessage({ id: "buckets.create_form.label.bucket_name" })}
                 value={bucketName}
+                variant="outlined"
+                placeholder={formatMessage({ id: "buckets.create_form.label.bucket_name.ph" })}
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography component="h6" variant="h6">
-                Features
+              <Typography component="h1" variant="h6">
+                <FormattedMessage id="buckets.create_form.feature" />
               </Typography>
               <hr />
             </Grid>
@@ -291,10 +296,8 @@ const AddBucket = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   addBucketVersioned(event.target.checked);
                 }}
-                description={
-                  "Allows to keep multiple versions of the same object under the same key."
-                }
-                label={"Versioning"}
+                description={formatMessage({ id: "buckets.create_form.label.versioning.desc" })}
+                label={formatMessage({ id: "buckets.create_form.label.versioning" })}
                 indicatorLabels={["On", "Off"]}
               />
             </Grid>
@@ -308,10 +311,8 @@ const AddBucket = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   enableObjectLocking(event.target.checked);
                 }}
-                label={"Object Locking"}
-                description={
-                  "Required to support retention and legal hold. Can only be enabled at bucket creation."
-                }
+                description={formatMessage({ id: "buckets.create_form.label.object_locking.desc" })}
+                label={formatMessage({ id: "buckets.create_form.label.object_locking" })}
                 indicatorLabels={["On", "Off"]}
               />
             </Grid>
@@ -324,8 +325,8 @@ const AddBucket = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   addBucketQuota(event.target.checked);
                 }}
-                label={"Quota"}
-                description={"Limit the amount of data in the bucket."}
+                description={formatMessage({ id: "buckets.create_form.label.quota.desc" })}
+                label={formatMessage({ id: "buckets.create_form.label.quota" })}
                 indicatorLabels={["On", "Off"]}
               />
             </Grid>
@@ -336,7 +337,7 @@ const AddBucket = ({
                     currentSelection={quotaType}
                     id="quota_type"
                     name="quota_type"
-                    label="Quota Type"
+                    label={formatMessage({ id: "buckets.create_form.label.quota_type" })}
                     onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
                       addBucketQuotaType(e.target.value as string);
                     }}
@@ -356,10 +357,11 @@ const AddBucket = ({
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           addBucketQuotaSize(e.target.value);
                         }}
-                        label="Quota"
+                        label={formatMessage({ id: "buckets.create_form.label.quota_count" })}
                         value={quotaSize}
                         required
                         min="1"
+                        variant="outlined"
                       />
                     </div>
                     <div className={classes.sizeFactorContainer}>
@@ -390,10 +392,8 @@ const AddBucket = ({
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     addBucketRetention(event.target.checked);
                   }}
-                  label={"Retention"}
-                  description={
-                    "Impose rules to prevent object deletion for a period of time."
-                  }
+                  description={formatMessage({ id: "buckets.create_form.label.retention.desc" })}
+                  label={formatMessage({ id: "buckets.create_form.label.retention" })}
                   indicatorLabels={["On", "Off"]}
                 />
               </Grid>
@@ -405,7 +405,7 @@ const AddBucket = ({
                     currentSelection={retentionMode}
                     id="retention_mode"
                     name="retention_mode"
-                    label="Retention Mode"
+                    label={formatMessage({ id: "buckets.create_form.label.retention_mode" })}
                     onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
                       addBucketRetentionMode(e.target.value as string);
                     }}
@@ -420,13 +420,13 @@ const AddBucket = ({
                     currentSelection={retentionUnit}
                     id="retention_unit"
                     name="retention_unit"
-                    label="Retention Unit"
+                    label={formatMessage({ id: "buckets.create_form.label.retention_unit" })}
                     onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
                       addBucketRetentionUnit(e.target.value as string);
                     }}
                     selectorOptions={[
-                      { value: "days", label: "Days" },
-                      { value: "years", label: "Years" },
+                      { value: "days", label: formatMessage({ id: "buckets.create_form.label.retention_unit.days" }) },
+                      { value: "years", label: formatMessage({ id: "buckets.create_form.label.retention_unit.years" }) },
                     ]}
                   />
                 </Grid>
@@ -438,10 +438,11 @@ const AddBucket = ({
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       addBucketRetentionValidity(e.target.valueAsNumber);
                     }}
-                    label="Retention Validity"
+                    label={formatMessage({ id: "buckets.create_form.label.retention_validity" })}
                     value={String(retentionValidity)}
                     required
                     min="1"
+                    variant="outlined"
                   />
                 </Grid>
               </React.Fragment>
@@ -454,7 +455,7 @@ const AddBucket = ({
               className={classes.clearButton}
               onClick={resetForm}
             >
-              Clear
+              <FormattedMessage id="buckets.create_form.button.clear" />
             </button>
             <Button
               type="submit"
@@ -462,7 +463,7 @@ const AddBucket = ({
               color="primary"
               disabled={addLoading || !sendEnabled}
             >
-              Save
+            <FormattedMessage id="buckets.create_form.button.save" />
             </Button>
           </Grid>
           {addLoading && (

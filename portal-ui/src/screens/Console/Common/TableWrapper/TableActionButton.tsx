@@ -105,7 +105,7 @@ const TableActionButton = ({
             }
           : () => null
       }
-      className={`${classes.spacing} ${disabled ? classes.buttonDisabled : ""}`}
+      className={`${disabled ? classes.buttonDisabled : ""}`}
       disabled={disabled}
     >
       {defineIcon(type, selected)}

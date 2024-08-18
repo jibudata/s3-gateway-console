@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import React, { Fragment, useState } from "react";
+import React, { Fragment, ReactNode, useState } from "react";
 import get from "lodash/get";
 import isString from "lodash/isString";
 import {
@@ -38,6 +38,7 @@ import {
   radioIcons,
 } from "../FormComponents/common/styleLibrary";
 import CheckboxWrapper from "../FormComponents/CheckboxWrapper/CheckboxWrapper";
+import { FormattedMessage } from "react-intl";
 
 //Interfaces for table Items
 
@@ -91,6 +92,7 @@ interface TableWrapperProps {
   selectedItems?: string[];
   radioSelection?: boolean;
   customEmptyMessage?: string;
+  customEmptyContent?: ReactNode;
   customPaperHeight?: string;
   noBackground?: boolean;
   columnsSelector?: boolean;
@@ -100,6 +102,7 @@ interface TableWrapperProps {
   autoScrollToBottom?: boolean;
   infiniteScrollConfig?: IInfiniteScrollConfig;
   sortConfig?: ISortConfig;
+  onSelectAllClick?: (e: React.ChangeEvent<HTMLInputElement>) => any;
 }
 
 const borderColor = "#9c9c9c80";
@@ -263,8 +266,12 @@ const styles = () =>
         borderColor: "#39393980",
         textTransform: "initial",
       },
+      ".optionsHeader": {
+        display: "block",
+        textAlign: "right",
+      },
       ".optionsAlignment": {
-        textAlign: "center",
+        textAlign: "right",
       },
       ".text-center": {
         textAlign: "center",
@@ -383,9 +390,8 @@ const generateColumnsMap = (
       <Column
         key={`col-tb-${index.toString()}`}
         dataKey={column.elementKey}
-        headerClassName={`titleHeader ${
-          column.headerTextAlign ? `text-${column.headerTextAlign}` : ""
-        }`}
+        headerClassName={`titleHeader ${column.headerTextAlign ? `text-${column.headerTextAlign}` : ""
+          }`}
         headerRenderer={() => (
           <Fragment>
             {sortColumn === column.elementKey && (
@@ -406,8 +412,8 @@ const generateColumnsMap = (
         cellRenderer={({ rowData }) => {
           const isSelected = selectedItems
             ? selectedItems.includes(
-                isString(rowData) ? rowData : rowData[idField]
-              )
+              isString(rowData) ? rowData : rowData[idField]
+            )
             : false;
           return subRenderFunction(rowData, column, isSelected);
         }}
@@ -508,10 +514,12 @@ const TableWrapper = ({
   columnsSelector = false,
   textSelectable = false,
   columnsShown = [],
-  onColumnChange = (column: string, state: boolean) => {},
+  onColumnChange = (column: string, state: boolean) => { },
   infiniteScrollConfig,
   sortConfig,
   autoScrollToBottom = false,
+  customEmptyContent,
+  onSelectAllClick,
 }: TableWrapperProps) => {
   const [columnSelectorOpen, setColumnSelectorOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<any>(null);
@@ -595,13 +603,11 @@ const TableWrapper = ({
   return (
     <Grid item xs={12}>
       <Paper
-        className={`${classes.paper} ${
-          noBackground ? classes.noBackground : ""
-        } ${
-          customPaperHeight !== ""
+        className={`${classes.paper} ${noBackground ? classes.noBackground : ""
+          } ${customPaperHeight !== ""
             ? customPaperHeight
             : classes.defaultPaperHeight
-        }`}
+          }`}
       >
         {isLoading && (
           <Grid container className={classes.loadingBox}>
@@ -653,7 +659,7 @@ const TableWrapper = ({
                       ref={registerChild}
                       disableHeader={false}
                       headerClassName={"headerItem"}
-                      headerHeight={40}
+                      headerHeight={60}
                       height={height}
                       noRowsRenderer={() => (
                         <Fragment>
@@ -663,16 +669,15 @@ const TableWrapper = ({
                         </Fragment>
                       )}
                       overscanRowCount={10}
-                      rowHeight={40}
+                      rowHeight={60}
                       width={width}
                       rowCount={records.length}
                       rowGetter={({ index }) => records[index]}
                       onRowClick={({ rowData }) => {
                         clickAction(rowData);
                       }}
-                      rowClassName={`rowLine ${findView ? "canClick" : ""} ${
-                        !findView && textSelectable ? "canSelectText" : ""
-                      }`}
+                      rowClassName={`rowLine ${findView ? "canClick" : ""} ${!findView && textSelectable ? "canSelectText" : ""
+                        }`}
                       onRowsRendered={onRowsRendered}
                       sort={sortConfig ? sortConfig.triggerSort : undefined}
                       sortBy={sortConfig ? sortConfig.currentSort : undefined}
@@ -685,14 +690,27 @@ const TableWrapper = ({
                     >
                       {hasSelect && (
                         <Column
-                          headerRenderer={() => <Fragment>Select</Fragment>}
+                          headerRenderer={() => (
+                            <>
+                              {onSelectAllClick && (
+                                <Checkbox
+                                  indeterminate={selectedItems && selectedItems.length > 0 && selectedItems.length < records.length}
+                                  checked={selectedItems && records.length > 0 && selectedItems.length === records.length}
+                                  onChange={onSelectAllClick}
+                                  inputProps={{ 'aria-label': 'select all desserts' }}
+                                  color="primary"
+                                  size="small"
+                                />
+                              )}
+                            </>
+                          )}
                           dataKey={idField}
                           width={selectWidth}
                           cellRenderer={({ rowData }) => {
                             const isSelected = selectedItems
                               ? selectedItems.includes(
-                                  isString(rowData) ? rowData : rowData[idField]
-                                )
+                                isString(rowData) ? rowData : rowData[idField]
+                              )
                               : false;
 
                             return (
@@ -709,24 +727,7 @@ const TableWrapper = ({
                                 onClick={(e) => {
                                   e.stopPropagation();
                                 }}
-                                checkedIcon={
-                                  <span
-                                    className={
-                                      radioSelection
-                                        ? classes.radioSelectedIcon
-                                        : classes.checkedIcon
-                                    }
-                                  />
-                                }
-                                icon={
-                                  <span
-                                    className={
-                                      radioSelection
-                                        ? classes.radioUnselectedIcon
-                                        : classes.unCheckedIcon
-                                    }
-                                  />
-                                }
+                                size="small"
                               />
                             );
                           }}
@@ -747,16 +748,16 @@ const TableWrapper = ({
                       )}
                       {hasOptions && (
                         <Column
-                          headerRenderer={() => <Fragment>Options</Fragment>}
+                          headerRenderer={() => <Fragment><FormattedMessage id="table.title.options" /></Fragment>}
                           dataKey={idField}
                           width={optionsWidth}
-                          headerClassName="optionsAlignment"
+                          headerClassName="optionsHeader"
                           className="optionsAlignment"
                           cellRenderer={({ rowData }) => {
                             const isSelected = selectedItems
                               ? selectedItems.includes(
-                                  isString(rowData) ? rowData : rowData[idField]
-                                )
+                                isString(rowData) ? rowData : rowData[idField]
+                              )
                               : false;
                             return elementActions(
                               itemActions || [],
@@ -777,9 +778,10 @@ const TableWrapper = ({
           <Fragment>
             {!isLoading && (
               <div>
-                {customEmptyMessage !== ""
-                  ? customEmptyMessage
-                  : `There are no ${entityName} yet.`}
+                {!!customEmptyContent ? customEmptyContent
+                  : customEmptyMessage !== ""
+                    ? customEmptyMessage
+                    : `There are no ${entityName} yet.`}
               </div>
             )}
           </Fragment>
